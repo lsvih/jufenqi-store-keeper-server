@@ -2,10 +2,8 @@
 <div>
     <header>
         <tab active-color='#88C929' :index.sync="index">
-            <tab-item active-class="tab-active" :selected="index === 0" v-tap="index = 0">待确认</tab-item>
-            <tab-item active-class="tab-active" :selected="index === 1" v-tap="index = 1">待支付</tab-item>
-            <tab-item active-class="tab-active" :selected="index === 2" v-tap="index = 2">待收货</tab-item>
-            <tab-item active-class="tab-active" :selected="index === 3" v-tap="index = 3">已预约</tab-item>
+            <tab-item active-class="tab-active" :selected="index === 0" v-tap="index = 0">已完成</tab-item>
+            <tab-item active-class="tab-active" :selected="index === 1" v-tap="index = 1">已取消</tab-item>
 
         </tab>
     </header>
@@ -17,7 +15,8 @@
                     <div>
                         <no-data v-if="List0.length === 0"></no-data>
                         <div v-else v-for="order in List0">
-                            <j-order-block :img="order.appt.customerImage" :time="getTime(order.appt.createdAt)" :name="order.appt.customerName" :tel="order.appt.customerMobile" :status="Status.zx[order.status].name"></j-order-block>
+                            <j-order-block :img="order.appt.customerImage" :time="getTime(order.appt.createdAt)" :name="order.appt.customerName" :tel="order.appt.customerMobile" :status="Status.zc[order.status].name"></j-order-block>
+                            <!-- 在待支付时暂未分单，使用的是appointment -->
                             <!-- 在待支付时暂未分单，使用的是appointment -->
                             <div class="store">
                                 <div class="store-line-1">
@@ -38,11 +37,7 @@
                                 <div class="store-line-2">
                                     <div class="store-line-2-right">总计:{{order.normalAmount+order.specialAmount|currency '￥' 2}}</div>
                                 </div>
-                                <div class="operate">
-                                    <div class="bottom" v-tap="(this.tempOrderNo = order.orderNo,this.showConfirm.confirm = true)">确认订单</div>
-                                </div>
                             </div>
-
                         </div>
                     </div>
                 </scroller>
@@ -82,64 +77,7 @@
                 </scroller>
             </div>
         </swiper-item>
-        <swiper-item height="100%">
-            <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:listc>
-                    <div>
-                        <no-data v-if="List2.length === 0"></no-data>
-                        <div v-else v-for="order in List2">
-                            <j-order-block :img="order.appt.customerImage" :time="getTime(order.appt.createdAt)" :name="order.appt.customerName" :tel="order.appt.customerMobile" :status="Status.zc[order.status].name"></j-order-block>
-                            <!-- 在待支付时暂未分单，使用的是appointment -->
-                            <!-- 在待支付时暂未分单，使用的是appointment -->
-                            <div class="store">
-                                <div class="store-line-1">
-                                    <div class="store-name">{{order.storeName}}</div>
-                                    <div class="store-tel"><img :src="telImg"></div>
-                                </div>
-                                <div class="store-line-2">
-                                    <div class="store-line-2-left">{{order.brandName}}</div>
-                                </div>
-                                <div class="store-line-2">
-                                    <div class="store-line-2-left">正价金额</div>
-                                    <div class="store-line-2-right">{{order.normalAmount|currency '￥' 2}}</div>
-                                </div>
-                                <div class="store-line-2">
-                                    <div class="store-line-2-left">特价金额</div>
-                                    <div class="store-line-2-right">{{order.specialAmount|currency '￥' 2}}</div>
-                                </div>
-                                <div class="store-line-2">
-                                    <div class="store-line-2-right">总计:{{order.normalAmount+order.specialAmount|currency '￥' 2}}</div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </scroller>
-            </div>
-        </swiper-item>
-        <swiper-item height="100%">
-            <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:listd>
-                    <div>
-                        <no-data v-if="List3.length === 0"></no-data>
-                        <div v-else v-for="order in List3">
-                            <j-order-block :img="order.appt.customerImage" :time="getTime(order.appt.createdAt)" :name="order.appt.customerName" :tel="order.appt.customerMobile" :status="Status.zc[order.status].name"></j-order-block>
-                            <!-- 在待支付时暂未分单，使用的是appointment -->
-                            <j-person :img="guideImg" :name="order.guideName"></j-person>
-                            <div class="store">
-                                <div class="store-line-1">
-                                    <div class="store-name">{{order.storeName}}</div>
-                                    <div class="store-tel"><img :src="telImg"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </scroller>
-            </div>
-        </swiper-item>
     </swiper>
-    <confirm :show.sync="showConfirm.confirm" title="" confirm-text="是" cancel-text="否" @on-confirm="confirm(tempOrderNo)">
-        <p style="text-align:center;">确认用户提交的信息是否准确?</p>
-    </confirm>
 </div>
 <j-footer></j-footer>
 </template>
@@ -148,7 +86,6 @@ import Lib from 'assets/Lib.js'
 import axios from 'axios'
 import NoData from 'common/components/no-data'
 import Status from 'common/status'
-import Confirm from 'vux-components/confirm'
 import {
     Tab,
     TabItem
@@ -158,7 +95,6 @@ import SwiperItem from 'vux-components/swiper-item'
 import Scroller from 'vux-components/scroller'
 import telImg from 'common/assets/images/tel.png'
 import JFooter from 'components/JFooter'
-import JPerson from 'common/components/j-person'
 import JOrderBlock from 'common/components/j-order-block'
 import guideImg from 'common/assets/images/role/guide.png'
 try {
@@ -182,10 +118,6 @@ export default {
             List2: [],
             List3: [],
             telImg,
-            tempOrderNo: null,
-            showConfirm: {
-                confirm: false
-            },
             guideImg
         }
     },
@@ -198,13 +130,11 @@ export default {
         Scroller,
         NoData,
         JFooter,
-        Confirm,
-        JPerson
     },
     ready() {
         axios.get(`${Lib.C.mOrderApi}materialOrders/byStoreUser`, {
             params: {
-                filter: `status:1,3,4,5`,
+                filter: `status:0,6`,
                 sort: "createdAt,desc",
                 userId: JSON.parse(localStorage.getItem('store-keeper')).userId,
                 size: 1000
@@ -212,17 +142,11 @@ export default {
         }).then((res) => {
             res.data.data.map((order) => {
                 switch (order.status) {
-                    case 1:
-                        this.List3.push(order)
-                        break;
-                    case 3:
-                        this.List1.push(order)
-                        break;
-                    case 4:
+                    case 6:
                         this.List0.push(order)
                         break;
-                    case 5:
-                        this.List2.push(order)
+                    case 0:
+                        this.List1.push(order)
                         break;
                     default:
                         break;
@@ -231,8 +155,6 @@ export default {
             this.$nextTick(() => {
                 this.$refs.lista.reset()
                 this.$refs.listb.reset()
-                this.$refs.listc.reset()
-                this.$refs.listd.reset()
             })
         }).catch((err) => {
             alert("获取订单失败，请稍候再试QAQ")

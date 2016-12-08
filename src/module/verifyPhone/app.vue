@@ -41,7 +41,10 @@ export default {
                 withCredentials: true,
                 responseType: true
             }).then((res) => {
-                localStorage.setItem('store-keeper',JSON.stringify(res.data.data))
+                let data = res.data.data
+                data.loginAt = new Date().getTime()
+                data.expiredAt = String(Number(data.loginAt) + Number(data.expiresIn * 1000 - 60 * 1000 * 100))
+                localStorage.setItem('store-keeper', JSON.stringify(data))
                 location.href = './index.html'
             }).catch((err) => {
                 alert("登录失败")
