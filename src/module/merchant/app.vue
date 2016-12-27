@@ -7,7 +7,7 @@
     <div class="submit" v-tap="gotoSubmit()">提 交</div>
 
 </div>
-<verify v-if="inVerify"></verify>
+<!-- <verify v-if="inVerify"></verify> -->
 <div class="mask" v-if="inVerify"></div>
 <loading :show="loading" text="请稍候..."></loading>
 </template>
