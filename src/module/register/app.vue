@@ -24,6 +24,7 @@ export default {
             password: "",
             loading: false,
             debugMode: true
+        }
     },
     components: {
         Loading
