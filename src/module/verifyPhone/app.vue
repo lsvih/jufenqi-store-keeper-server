@@ -46,7 +46,7 @@ export default {
                 //data.loginAt = new Date().getTime()
                 //data.expiredAt = String(Number(data.loginAt) + Number(data.expiresIn * 1000 - 60 * 1000 * 100))
                 //alert(JSON.stringify(data));
-                if(-1 == data.authorities.indexOf('ROLE_SERVICE_MANAGER')){
+                if(-1 == data.authorities.indexOf('ROLE_STORE_KEEPER')){
                     localStorage.setItem('store-keeper-register', JSON.stringify(data))
                     location.href = './registerComplete.html'
                 }
