@@ -1,11 +1,13 @@
 <template>
 <div class="verify-phone">
     <div class="user-icon"><img src="./user.png"></div>
-    <div class="phone-number"><img src="./login.png"><input type="tel" placeholder="请输入手机号码" v-model="phoneNumber"></div>
-    <div class="password"><img src="./password.png"><input type="password" placeholder="请输入密码" v-model="password"></div>
+    <div class="phone-number"><img src="./login.png"><input type="tel" placeholder="请输入注册手机号码" v-model="phoneNumber"></div>
+    <div class="password"><img src="./password.png"><input type="password" placeholder="请输入注册密码" v-model="password"></div>
     <!-- <div class="user-agreement">我已阅读并同意<b>居分期用户协议</b></div> -->
-    <div class="submit" v-bind:class="{'active':isTruePhoneNum()}" v-tap="isTruePhoneNum()?gotoVerify():return;">登 录</div>
-    <div class="register" v-tap="gotoRegister()">注 册</div></div></div>
+    <div class="submit" v-bind:class="{'active':isTruePhoneNum()}" v-tap="isTruePhoneNum()?gotoRegister():return;">注 册</div>
+    <div class="back" v-tap="gotoLogin()">返回登陆</div>
+
+</div>
 <verify v-if="inVerify"></verify>
 <div class="mask" v-if="inVerify"></div>
 <loading :show="loading" text="请稍候..."></loading>
@@ -20,7 +22,8 @@ export default {
         return {
             phoneNumber: "",
             password: "",
-            loading: false
+            loading: false,
+            debugMode: true
         }
     },
     components: {
@@ -28,41 +31,19 @@ export default {
     },
     methods: {
         isTruePhoneNum() {
+            if(this.debugMode == true){
+                return true
+            }
             let reg = /^1[3|4|5|7|8]\d{9}$/
             return (reg.test(String(this.phoneNumber)) && this.password)
         },
-        gotoVerify() {
-            this.loading = true
-            axios.post(`${Lib.C.userApi}auth/login`, {}, {
-                params: {
-                    account: this.phoneNumber,
-                    password: this.password,
-                    type: 8
-                },
-                withCredentials: true,
-                responseType: true
-            }).then((res) => {
-                let data = res.data.data
-                //data.loginAt = new Date().getTime()
-                //data.expiredAt = String(Number(data.loginAt) + Number(data.expiresIn * 1000 - 60 * 1000 * 100))
-                //alert(JSON.stringify(data));
-                if(-1 == data.authorities.indexOf('ROLE_STORE_KEEPER')){
-                    localStorage.setItem('store-keeper-register', JSON.stringify(data))
-                    location.href = './registerComplete.html'
-                }
-                else{
-                    localStorage.setItem('store-keeper', JSON.stringify(data))
-                    location.href = './index.html'
-                }
-
-            }).catch((err) => {
-                alert("登录失败")
-                this.loading = false
-                throw err
-            })
-        },
         gotoRegister() {
-            location.href = './register.html'
+            localStorage.setItem('register-phoneNumber', this.phoneNumber)
+            localStorage.setItem('register-password', this.password)
+            location.href = './merchant.html'
+        },
+        gotoLogin() {
+            location.href = './verifyPhone.html'
         }
     }
 }
@@ -186,7 +167,7 @@ body {
     top: 374px;
 }
 
-.register {
+.back {
     position: absolute;
     border-radius: 5px;
     border: 1px solid #88C928;
