@@ -37,7 +37,7 @@ export default {
                 params: {
                     account: this.phoneNumber,
                     password: this.password,
-                    type: 8
+                    type: 7
                 },
                 withCredentials: true,
                 responseType: true
