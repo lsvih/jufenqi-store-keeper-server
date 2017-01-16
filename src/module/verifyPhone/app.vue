@@ -51,7 +51,8 @@ export default {
                     location.href = './registerComplete.html'
                 }
                 else{
-                    localStorage.setItem('store-keeper', JSON.stringify(data))
+                    localStorage.setItem('user', JSON.stringify(data))
+                    console.log(data)
                     location.href = './index.html'
                 }
 
