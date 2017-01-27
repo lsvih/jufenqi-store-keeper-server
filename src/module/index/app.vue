@@ -163,11 +163,11 @@ import JOrderBlock from 'common/components/j-order-block'
 import guideImg from 'common/assets/images/role/guide.png'
 try {
     let now = Number(new Date().getTime())
-    if (Number(JSON.parse(localStorage['store-keeper']).expiredAt) < now) {
-        localStorage.removeItem('store-keeper')
+    if (Number(JSON.parse(localStorage['user']).expiredAt) < now) {
+        localStorage.removeItem('user')
         location.href = './verifyPhone.html'
     }
-    axios.defaults.headers.common['Authorization'] = JSON.parse(localStorage.getItem("store-keeper")).tokenType + ' ' + JSON.parse(localStorage.getItem("store-keeper")).token
+    axios.defaults.headers.common['Authorization'] = JSON.parse(localStorage.getItem("user")).tokenType + ' ' + JSON.parse(localStorage.getItem("user")).token
 } catch (e) {
     localStorage.clear()
     location.href = './verifyPhone.html'
@@ -206,7 +206,7 @@ export default {
             params: {
                 filter: `status:1,3,4,5`,
                 sort: "createdAt,desc",
-                userId: JSON.parse(localStorage.getItem('store-keeper')).userId,
+                userId: JSON.parse(localStorage.getItem('user')).userId,
                 size: 1000
             }
         }).then((res) => {

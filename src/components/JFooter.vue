@@ -24,13 +24,13 @@ export default {
                 icon: inIcon,
                 actIcon: inIconAct
             }, {
-                name: '历史订单',
-                ename: 'history',
+                name: '退款订单',
+                ename: 'refund',
                 icon: indexIcon,
                 actIcon: indexIconAct
             }, {
                 name: '我的',
-                ename: 'my',
+                ename: 'myinfo',
                 icon: userIcon,
                 actIcon: userIconAct
             }]
@@ -41,9 +41,6 @@ export default {
             return Lib.M.GetThisPage() == page
         },
         gotoPage(page) {
-          if(page == "my"){
-            return
-          }
           location.href = page + ".html"
         }
     },
@@ -52,7 +49,7 @@ export default {
     }
 }
 </script>
-<style scoped lang="less">
+<style lang="less">
 footer {
     position: fixed;
     width: 100%;

@@ -11,7 +11,7 @@
     <swiper :index.sync="index" :height="getScreenHeight()+'px'" :show-dots="false">
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:lista>
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:lista>
                     <div>
                         <no-data v-if="List0.length === 0"></no-data>
                         <div v-else v-for="order in List0">
@@ -45,7 +45,7 @@
         </swiper-item>
         <swiper-item height="100%">
             <div class="tab-swiper vux-center content">
-                <scroller :height="getScreenHeight()-44-45+'px'" lock-x scroller-y v-ref:listb>
+                <scroller :height="getScreenHeight()-44+'px'" lock-x scroller-y v-ref:listb>
                     <div>
                         <no-data v-if="List1.length === 0"></no-data>
                         <div v-else v-for="order in List1">
@@ -79,7 +79,6 @@
         </swiper-item>
     </swiper>
 </div>
-<j-footer></j-footer>
 </template>
 <script>
 import Lib from 'assets/Lib.js'
@@ -99,11 +98,11 @@ import JOrderBlock from 'common/components/j-order-block'
 import guideImg from 'common/assets/images/role/guide.png'
 try {
     let now = Number(new Date().getTime())
-    if (Number(JSON.parse(localStorage['store-keeper']).expiredAt) < now) {
-        localStorage.removeItem('store-keeper')
+    if (Number(JSON.parse(localStorage['user']).expiredAt) < now) {
+        localStorage.removeItem('user')
         location.href = './verifyPhone.html'
     }
-    axios.defaults.headers.common['Authorization'] = JSON.parse(localStorage.getItem("store-keeper")).tokenType + ' ' + JSON.parse(localStorage.getItem("store-keeper")).token
+    axios.defaults.headers.common['Authorization'] = JSON.parse(localStorage.getItem("user")).tokenType + ' ' + JSON.parse(localStorage.getItem("user")).token
 } catch (e) {
     localStorage.clear()
     location.href = './verifyPhone.html'
@@ -136,7 +135,7 @@ export default {
             params: {
                 filter: `status:0,6`,
                 sort: "createdAt,desc",
-                userId: JSON.parse(localStorage.getItem('store-keeper')).userId,
+                userId: JSON.parse(localStorage.getItem('user')).userId,
                 size: 1000
             }
         }).then((res) => {

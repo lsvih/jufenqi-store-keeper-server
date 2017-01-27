@@ -1,5 +1,8 @@
-if (!window.localStorage.getItem('store-keeper')) {
-  window.location.href = `./verifyPhone.html`
+let lsData = JSON.parse(window.localStorage.getItem('user'))
+if (!lsData) {
+	window.location.href = './verifyPhone.html'
+} else if (-1 == lsData.authorities.indexOf('ROLE_STORE_KEEPER')) {
+  	window.location.href = `./verifyPhone.html`
 }
 import Vue from 'vue'
 import App from './app'
